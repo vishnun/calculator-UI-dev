@@ -13,6 +13,8 @@ var display = function(data){
 	if(data > parseInt(data)){
 		data = data.toFixed(2);
 	}
+	if(data.toString().length > 10)
+		data = data.toExponential(5);
 	textbox.value = data;
 }
 
