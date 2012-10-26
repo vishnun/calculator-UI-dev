@@ -1,9 +1,9 @@
 .container {
-	width: 13%;
 	background: #ECECEC;
 	border: 2px solid #ADAAAA;
 	padding: 10px;
 	margin: 10px;
+	width: 240px;
 }
 @font-face {
 	font-family: digital-7;
@@ -32,9 +32,12 @@ input[type=text] {
 
 .operations {
 	display: inline-block;
-	width: 10%;
+	width: 14%;
+	margin: 5px 5px;
 }
 
 .operations button {
-	height: 38px;
+	width: 50px;
+	height: 40px;
+	margin: 1px;
 }
