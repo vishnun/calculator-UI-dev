@@ -15,7 +15,7 @@ input[type=text] {
 	line-height: 30px;
 	margin: 10px;
 	font: 35px digital-7;
-	direction: rtl;
+	text-align: right;
 }
 
 .digits {

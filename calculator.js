@@ -1,49 +1,53 @@
 var buttons = document.getElementsByTagName('button');
 var dataStack =[];
 var textbox = document.getElementById('text');
-var isEqualPressed = false;
 var clearField = false;
+var DECIMAL = '.';
 
-var display = function(result){
-	document.getElementById('text').value = "" + result;
+var push = function(value, operator) {
+	dataStack.push(value);
+	dataStack.push(operator);
+}
+
+var display = function(data){
+	data = data.toFixed(2);
+	textbox.value = data;
 }
 
 var execute = function(operator) {
 	clearField = true;
-	if(dataStack.length == 0) {
-		var operand=parseFloat(textbox.value);
-		dataStack.push(operand);
-		dataStack.push(operator);
+	if(dataStack.length > 0){
+		var oldOp = dataStack.pop();
+		var operand1 = parseFloat(dataStack.pop());
+		var operand2 = parseFloat(textbox.value);
+		console.log("text: " +textbox.value);
+		console.log("operand: " + operand2);
+		var result = operation(operand1, oldOp, operand2);
+		display(result);
+		if(operator!= '='){			
+			push(result, operator);
+		}		
 		return;
 	}
-	var oldOp = dataStack.pop();
-	var operand1 = parseFloat(dataStack.pop());
-	var operand2 = parseFloat(textbox.value);
-	var result = operation(operand1, oldOp, operand2);
-	display(result);
-	if(operator == "=" ) {
-		isEqualPressed = true;	
+	if(operator == '=')
 		return;
-	}
-	dataStack.push(result);
-	dataStack.push(operator);
+	push(textbox.value, operator);
 }
 
 var operation = function(operand1, oldOp, operand2) {
 	switch(oldOp){
-		case "+":
-			return operand1 + operand2;
-			break;
-		case "-":
-			return operand1 - operand2;
-			break;
-		case "*":
-		    return operand1 * operand2;
-			break;
-		case "/":
-			return operand1 / operand2;
-			break;
+		case "+": return operand1 + operand2;
+		case "-": return operand1 - operand2;
+		case "*": return operand1 * operand2;
+		case "/": return operand1 / operand2;
 	}
+}
+
+var isOperator = function(input){
+	if(input == '+' || input == '-' ||input == '*' ||input == '/' || input == '='){
+		return true;
+	}
+	return false;
 }
 
 var calculate = function () {
@@ -55,7 +59,21 @@ var calculate = function () {
 		textbox.value += this.value;
 		return;
 	}
-	execute(this.value);	
+	if(isOperator(this.value)) {
+		execute(this.value);	
+		return;
+	}
+	if(this.value == DECIMAL){
+		if(textbox.value == "") {
+			textbox.value = "0";
+		}
+		if(clearField){
+			textbox.value = 0;
+			clearField = false;
+		}
+		textbox.value += this.value;
+	}
+
 }
 
 for(var i=0; i<buttons.length; i++) {
