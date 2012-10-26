@@ -1,5 +1,9 @@
-body {
-	width: 15%;
+.container {
+	width: 13%;
+	background: #ECECEC;
+	border: 2px solid #ADAAAA;
+	padding: 10px;
+	margin: 10px;
 }
 
 button {
@@ -10,7 +14,7 @@ button {
 }
 
 input[type=text] {
-	width: 100%	;
+	width: 90%	;
 	height: 30px;
 	line-height: 30px;
 	margin: 10px;
@@ -20,7 +24,7 @@ input[type=text] {
 
 .digits {
 	display: inline-block;
-	width: 68%;
+	width: 69%;
 }
 
 .operations {

@@ -18,12 +18,22 @@ var display = function(data){
 	textbox.value = data;
 }
 
+var isInvalid = function(oldOp, operand2){
+	if(oldOp == '/' && operand2 == 0)
+		return true;
+	return false;
+}
+
 var execute = function(operator) {
 	clearField = true;
 	if(dataStack.length > 0){
 		var oldOp = dataStack.pop();
 		var operand1 = parseFloat(dataStack.pop());
 		var operand2 = parseFloat(textbox.value);
+		if(isInvalid(oldOp, operand2)){
+			textbox.value = "E";
+			return;
+		}
 		console.log("text: " +textbox.value);
 		console.log(operand1 + " " + operand2);
 		var result = operation(operand1, oldOp, operand2);
