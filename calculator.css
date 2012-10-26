@@ -5,7 +5,10 @@
 	padding: 10px;
 	margin: 10px;
 }
-
+@font-face {
+	font-family: digital-7;
+	src: url(fonts/digital-7.ttf);
+}
 button {
 	width: 50px;
 	height: 50px;
