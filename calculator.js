@@ -9,8 +9,8 @@ var push = function(value, operator) {
 	dataStack.push(operator);
 }
 
-var display = function(data){
-	if(data > parseInt(data)){
+var display = function(data) {
+	if(data > parseInt(data)) {
 		data = data.toFixed(2);
 	}
 	if(data.toString().length > 10)
@@ -18,7 +18,7 @@ var display = function(data){
 	textbox.value = data;
 }
 
-var isInvalid = function(oldOp, operand2){
+var isInvalid = function(oldOp, operand2) {
 	if(oldOp == '/' && operand2 == 0)
 		return true;
 	return false;
@@ -26,11 +26,11 @@ var isInvalid = function(oldOp, operand2){
 
 var execute = function(operator) {
 	clearField = true;
-	if(dataStack.length > 0){
+	if(dataStack.length > 0) {
 		var oldOp = dataStack.pop();
 		var operand1 = parseFloat(dataStack.pop());
 		var operand2 = parseFloat(textbox.value);
-		if(isInvalid(oldOp, operand2)){
+		if(isInvalid(oldOp, operand2)) {
 			textbox.value = "E";
 			return;
 		}
@@ -51,7 +51,7 @@ var execute = function(operator) {
 }
 
 var operation = function(operand1, oldOp, operand2) {
-	switch(oldOp){
+	switch(oldOp) {
 		case "+": return operand1 + operand2;
 		case "-": return operand1 - operand2;
 		case "*": return operand1 * operand2;
@@ -59,8 +59,9 @@ var operation = function(operand1, oldOp, operand2) {
 	}
 }
 
-var isOperator = function(input){
-	if(input == '+' || input == '-' ||input == '*' ||input == '/' || input == '='){
+var isOperator = function(input) {
+	if(input == '+' || input == '-' ||input == '*' 
+					||input == '/' || input == '=') {
 		return true;
 	}
 	return false;
@@ -76,14 +77,20 @@ var calculate = function () {
 		clearField = false;
 	}
 	if(!isNaN(this.value)) {
+		if(textbox.value.length == 10)
+			return;
 		textbox.value += this.value;
 		return;
 	}
-	if(this.value == DECIMAL){
+	if(this.value == DECIMAL) {
 		if(textbox.value == "") {
 			textbox.value = "0";
 		}
 		textbox.value += this.value;
+	}
+	if(this.value == "C") {
+		textbox.value = "";
+		dataStack = [];
 	}
 
 }
