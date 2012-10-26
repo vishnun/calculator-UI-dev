@@ -2,7 +2,8 @@ var buttons = document.getElementsByTagName('button');
 var dataStack =[];
 var textbox = document.getElementById('text');
 var clearField = false;
-var DECIMAL = '.';
+var DECIMAL = '.',
+	memory = 0;
 
 var push = function(value, operator) {
 	dataStack.push(value);
@@ -60,14 +61,32 @@ var operation = function(operand1, oldOp, operand2) {
 }
 
 var isOperator = function(input) {
-	if(input == '+' || input == '-' ||input == '*' 
-					||input == '/' || input == '=') {
-		return true;
+	return input == '+' || input == '-' ||input == '*' 
+					||input == '/' || input == '=' ;
+}
+
+var memoryOperator = function (mOperator) {
+	return mOperator == 'MR' || mOperator == 'M+' || mOperator == 'M-';
+}
+
+var mExecute = function(mOperator) {
+	if(mOperator == 'M+'){
+		memory += parseFloat(textbox.value);
 	}
-	return false;
+	else if(mOperator == 'M-'){
+	 	memory -= parseFloat(textbox.value);
+	}
+	else {
+		textbox.value = parseFloat(memory);
+	}
 }
 
 var calculate = function () {
+
+	if(memoryOperator(this.value)){
+		mExecute(this.value);	
+		return;	
+	}
 	if(isOperator(this.value)) {
 		execute(this.value);	
 		return;
@@ -90,6 +109,7 @@ var calculate = function () {
 	}
 	if(this.value == "C") {
 		textbox.value = "";
+		memory = 0;
 		dataStack = [];
 	}
 
