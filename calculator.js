@@ -10,7 +10,9 @@ var push = function(value, operator) {
 }
 
 var display = function(data){
-	data = data.toFixed(2);
+	if(data > parseInt(data)){
+		data = data.toFixed(2);
+	}
 	textbox.value = data;
 }
 
@@ -21,7 +23,7 @@ var execute = function(operator) {
 		var operand1 = parseFloat(dataStack.pop());
 		var operand2 = parseFloat(textbox.value);
 		console.log("text: " +textbox.value);
-		console.log("operand: " + operand2);
+		console.log(operand1 + " " + operand2);
 		var result = operation(operand1, oldOp, operand2);
 		display(result);
 		if(operator!= '='){			
@@ -31,6 +33,8 @@ var execute = function(operator) {
 	}
 	if(operator == '=')
 		return;
+	if(textbox.value == "")
+		textbox.value = "0";
 	push(textbox.value, operator);
 }
 
@@ -51,25 +55,21 @@ var isOperator = function(input){
 }
 
 var calculate = function () {
-	if(!isNaN(this.value)) {
-		if(clearField) {
-			textbox.value = "";
-			clearField = false;
-		}
-		textbox.value += this.value;
-		return;
-	}
 	if(isOperator(this.value)) {
 		execute(this.value);	
+		return;
+	}
+	if(clearField) {
+		textbox.value = "";
+		clearField = false;
+	}
+	if(!isNaN(this.value)) {
+		textbox.value += this.value;
 		return;
 	}
 	if(this.value == DECIMAL){
 		if(textbox.value == "") {
 			textbox.value = "0";
-		}
-		if(clearField){
-			textbox.value = 0;
-			clearField = false;
 		}
 		textbox.value += this.value;
 	}
