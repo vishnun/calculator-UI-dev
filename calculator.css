@@ -16,6 +16,10 @@ button {
 	font: 30px digital-7
 }
 
+.textbox {
+	position: relative;
+}
+
 input[type=text] {
 	width: 90%	;
 	height: 30px;
@@ -40,4 +44,11 @@ input[type=text] {
 	width: 50px;
 	height: 40px;
 	margin: 1px;
+}
+
+#memory-indicator {
+	position: absolute;
+	top: 20px;
+	left: 15px;
+	display: none;
 }

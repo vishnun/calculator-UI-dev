@@ -79,6 +79,8 @@ var calculator = function () {
 	mExecute = function(mOperator) {
 		if(mOperator == 'M+'){
 			memory += parseFloat(textbox.value);
+			var memIndicator = document.getElementById("memory-indicator");
+			memIndicator.style.display = "block";
 		}
 		else if(mOperator == 'M-'){
 		 	memory -= parseFloat(textbox.value);
@@ -87,6 +89,12 @@ var calculator = function () {
 			textbox.value = parseFloat(memory);
 		}
 	},
+
+	clearMemory = function(){
+		var memIndicator = document.getElementById("memory-indicator");
+			memIndicator.style.display = "none";
+			memory = 0;
+	}
 
 	calculate = function () {
 
@@ -101,21 +109,20 @@ var calculator = function () {
 		if(!isNaN(this.value)) {
 			if(textbox.value.length >= 10)
 				return;
-			if(textbox.value == 0){
+			if(textbox.value == "0"){
 				textbox.value = "";
 			}
 			textbox.value += this.value;
 			return;
 		}
 		if(this.value == DECIMAL) {
-			if(textbox.value == "") {
-				textbox.value = "0";
-			}
-			textbox.value += this.value;
+			if(textbox.value.indexOf(".") == -1)
+				textbox.value += this.value;
+			return;
 		}
 		if(this.value == "C") {
-			textbox.value = "";
-			memory = 0;
+			clearMemory();
+			textbox.value = "0";
 			resetData();
 		}
 		execute(this.value);	
@@ -124,7 +131,7 @@ var calculator = function () {
 	};
 
 	var init = function(){
-		textbox.value = 0;
+		textbox.value = "0";
 		for(var i=0; i<buttons.length; i++) {
 			buttons[i].onclick = calculate;
 		}
