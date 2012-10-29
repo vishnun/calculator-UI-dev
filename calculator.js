@@ -72,11 +72,6 @@ var calculator = function () {
 		}
 	},
 
-	isOperator = function(input) {
-		return input == '+' || input == '-' ||input == '*' 
-						||input == '/' || input == '=' ;
-	},
-
 	memoryOperator = function (mOperator) {
 		return mOperator == 'MR' || mOperator == 'M+' || mOperator == 'M-';
 	},
@@ -95,17 +90,20 @@ var calculator = function () {
 
 	calculate = function () {
 
-		if(isOperator(this.value)) {
-			execute(this.value);	
-			return;
+		if(memoryOperator(this.value)){
+			mExecute(this.value);	
+			return;	
 		}
 		if(clearField) {
-			textbox.value = "";
+			textbox.value = "0";
 			clearField = false;
 		}
 		if(!isNaN(this.value)) {
-			if(textbox.value.length == 10)
+			if(textbox.value.length >= 10)
 				return;
+			if(textbox.value == 0){
+				textbox.value = "";
+			}
 			textbox.value += this.value;
 			return;
 		}
@@ -120,14 +118,13 @@ var calculator = function () {
 			memory = 0;
 			resetData();
 		}
-		if(memoryOperator(this.value)){
-			mExecute(this.value);	
-			return;	
-		}
+		execute(this.value);	
+		return;
 
 	};
 
 	var init = function(){
+		textbox.value = 0;
 		for(var i=0; i<buttons.length; i++) {
 			buttons[i].onclick = calculate;
 		}
