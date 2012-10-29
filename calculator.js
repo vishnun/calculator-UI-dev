@@ -1,15 +1,23 @@
 var calculator = function () {
 
 	var buttons = document.getElementsByTagName('button'),
-		dataStack =[],
 		textbox = document.getElementById('text'),
 		clearField = false,
 		DECIMAL = '.',
 		memory = 0,
+		oldOp = 0,
+		oldValue = 0,
+		newValue = 0,
+
 
 	push = function(value, operator) {
-		dataStack.push(value);
-		dataStack.push(operator);
+		oldOp = operator;
+		oldValue = parseFloat(value);
+	},
+
+	resetData = function(){
+		oldOp = 0;
+		oldValue = 0;
 	},
 
 	display = function(data) {
@@ -29,24 +37,27 @@ var calculator = function () {
 
 	execute = function(operator) {
 		clearField = true;
-		if(dataStack.length > 0) {
-			var oldOp = dataStack.pop(),
-				operand1 = parseFloat(dataStack.pop()),
-				operand2 = parseFloat(textbox.value);
+		
+		if(oldOp != 0 && oldValue != 0) {
+			newValue = parseFloat(textbox.value);
 
-			if(isInvalid(oldOp, operand2)) {
+			if(isInvalid(oldOp, newValue)) {
 				textbox.value = "E";
 				return;
 			}
-			var result = operation(operand1, oldOp, operand2);
+			var result = operation(oldValue, oldOp, newValue);
+			resetData();
 			display(result);
 			if(operator!= '='){			
 				push(result, operator);
 			}		
 			return;
 		}
-		if(operator == '=')
+
+		if(operator == '='){
 			return;
+		}
+
 		if(textbox.value == "")
 			textbox.value = "0";
 		push(textbox.value, operator);
@@ -84,10 +95,6 @@ var calculator = function () {
 
 	calculate = function () {
 
-		if(memoryOperator(this.value)){
-			mExecute(this.value);	
-			return;	
-		}
 		if(isOperator(this.value)) {
 			execute(this.value);	
 			return;
@@ -111,7 +118,11 @@ var calculator = function () {
 		if(this.value == "C") {
 			textbox.value = "";
 			memory = 0;
-			dataStack = [];
+			resetData();
+		}
+		if(memoryOperator(this.value)){
+			mExecute(this.value);	
+			return;	
 		}
 
 	};
