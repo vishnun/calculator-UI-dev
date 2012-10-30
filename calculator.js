@@ -72,11 +72,11 @@ var calculator = function () {
 		}
 	},
 
-	memoryOperator = function (mOperator) {
+	isMemoryOperator = function (mOperator) {
 		return mOperator == 'MR' || mOperator == 'M+' || mOperator == 'M-';
 	},
 
-	mExecute = function(mOperator) {
+	memoryExecute = function(mOperator) {
 		if(mOperator == 'M+'){
 			memory += parseFloat(textbox.value);
 			var memIndicator = document.getElementById("memory-indicator");
@@ -98,8 +98,8 @@ var calculator = function () {
 
 	calculate = function () {
 
-		if(memoryOperator(this.value)){
-			mExecute(this.value);	
+		if(isMemoryOperator(this.value)){
+			memoryExecute(this.value);	
 			return;	
 		}
 		if(clearField) {
@@ -135,6 +135,7 @@ var calculator = function () {
 		for(var i=0; i<buttons.length; i++) {
 			buttons[i].onclick = calculate;
 		}
+
 	};
 	return init();
 };
