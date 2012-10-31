@@ -8,6 +8,7 @@ var calculator = function () {
 		oldOp = 0,
 		oldValue = 0,
 		newValue = 0,
+		buttonNames = ['MR', 'MC', 'M-'],
 
 
 	push = function(value, operator) {
@@ -73,20 +74,21 @@ var calculator = function () {
 	},
 
 	isMemoryOperator = function (mOperator) {
-		return mOperator == 'MR' || mOperator == 'M+' || mOperator == 'M-';
+		return mOperator == 'MR' || mOperator == 'M+' || mOperator == 'M-' || mOperator == 'MC';
 	},
 
-	memoryExecute = function(mOperator) {
-		if(mOperator == 'M+'){
-			memory += parseFloat(textbox.value);
-			var memIndicator = document.getElementById("memory-indicator");
-			memIndicator.style.display = "block";
-		}
-		else if(mOperator == 'M-'){
-		 	memory -= parseFloat(textbox.value);
-		}
-		else {
-			textbox.value = parseFloat(memory);
+	createMemoryButtons = function(){
+		while(buttonNames.length >0 ) {
+			var memoryButton= document.createElement('button');
+			var name = buttonNames.pop();
+			memoryButton.setAttribute('value', name);
+			memoryButton.setAttribute('name', 'removable');
+			memoryButton.innerHTML = name;
+			var memoryOperations = document.getElementById('memory-operations');
+			memoryOperations.appendChild(memoryButton);
+			memoryButton.onclick = function(){
+				calculate(this.value);
+			};
 		}
 	},
 
@@ -96,12 +98,41 @@ var calculator = function () {
 			memory = 0;
 	},
 
+	removeMemoryButtons = function() {
+		var removableButtons = document.getElementsByName("removable");
+		var parent = removableButtons[0].parentNode; 
+		for(var i=0,len=removableButtons.length;i<len;i++){
+			parent.removeChild(removableButtons[0]);	
+		} 
+	},
+
+	memoryExecute = function(mOperator) {
+		switch(mOperator){
+			case 'M+':
+				createMemoryButtons();
+				memory += parseFloat(textbox.value);
+				var memIndicator = document.getElementById("memory-indicator");
+				memIndicator.style.display = "block";
+				break;
+			case 'M-':
+				console.log("in M-");
+			 	memory -= parseFloat(textbox.value);
+				break;
+			case 'MC':
+				console.log("Remove Buttons");
+				clearMemory();
+				removeMemoryButtons();
+				break;
+			default:
+				textbox.value = parseFloat(memory);
+		}
+	},
+
 	isOperator = function(value){
 		if(value == DECIMAL)
 			return false;
 		return new RegExp(/[*+-\/=]/).test(value);
-	}
-
+	},
 
 
 	calculate = function (value) {
@@ -133,7 +164,6 @@ var calculator = function () {
 			return;
 		}
 		if(value == "C") {
-			clearMemory();
 			textbox.value = "0";
 			resetData();
 		}	
@@ -145,13 +175,11 @@ var calculator = function () {
 		textbox.value = "0";
 		for(var i=0; i<buttons.length; i++) {
 			buttons[i].onclick = function(event){
-				console.log(this.value);
 				calculate(this.value);
 			}
 		}
 		document.body.onkeypress = function(event){
 			calculate(String.fromCharCode(event.charCode));
-			console.log(String.fromCharCode(event.charCode));
 		}
 	};
 	return init();
