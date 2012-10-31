@@ -100,8 +100,8 @@ var calculator = function () {
 
 	removeMemoryButtons = function() {
 		var removableButtons = document.getElementsByName("removable");
-		var parent = removableButtons[0].parentNode; 
-		for(var i=0,len=removableButtons.length;i<len;i++){
+		var parent = document.getElementById('memory-operations');
+		while(removableButtons.length){
 			parent.removeChild(removableButtons[0]);	
 		} 
 	},
