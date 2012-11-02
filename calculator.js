@@ -1,11 +1,35 @@
 var calculator = function () {
 
+	var data = {
+		value: 0,
+		textbox: document.getElementById('text'),
+		length: 0,
+		displayErrorMessage: function(message){
+			this.textbox.value = message;
+			this.value = 0;
+		},
+		store: function(inputValue){
+			this.value = parseFloat(inputValue);
+			if(this.value > parseInt(data)) {
+				this.value = this.value.toFixed(2);
+			}
+			if(this.value.toString().length > 10) {
+				this.value = this.value.toExponential(2);
+			}
+			this.textbox.value = this.value;
+		},
+		retrieve: function(){
+			this.value = parseFloat(this.textbox.value);
+			this.length = this.value.toString().length;
+			return this.value;
+		}
+	};
+
 	var buttons = document.getElementsByTagName('button'),
-		textbox = document.getElementById('text'),
 		clearField = false,
 		DECIMAL = '.',
 		memory = 0,
-		oldOp = 0,
+		oldOp = null,
 		oldValue = 0,
 		newValue = 0,
 		buttonNames = ['MR', 'MC', 'M-'],
@@ -17,17 +41,8 @@ var calculator = function () {
 	},
 
 	resetData = function(){
-		oldOp = 0;
+		oldOp = null;
 		oldValue = 0;
-	},
-
-	display = function(data) {
-		if(data > parseInt(data)) {
-			data = data.toFixed(2);
-		}
-		if(data.toString().length > 10)
-			data = data.toExponential(5);
-		textbox.value = data;
 	},
 
 	isInvalid = function(oldOp, operand2) {
@@ -39,16 +54,16 @@ var calculator = function () {
 	execute = function(operator) {
 		clearField = true;
 		
-		if(oldOp != 0 && oldValue != 0) {
-			newValue = parseFloat(textbox.value);
+		if(oldOp != null && oldValue != 0) {
+			newValue = data.retrieve();
 
 			if(isInvalid(oldOp, newValue)) {
-				textbox.value = "E";
+				data.displayErrorMessage("E");
 				return;
 			}
 			var result = operation(oldValue, oldOp, newValue);
 			resetData();
-			display(result);
+			data.store(result);
 			if(operator!= '='){			
 				push(result, operator);
 			}		
@@ -59,9 +74,9 @@ var calculator = function () {
 			return;
 		}
 
-		if(textbox.value == "")
-			textbox.value = "0";
-		push(textbox.value, operator);
+		if(data.retrieve() == "")
+			data.store("0");
+		push(data.retrieve(), operator);
 	},
 
 	operation = function(operand1, oldOp, operand2) {
@@ -104,27 +119,26 @@ var calculator = function () {
 		while(removableButtons.length){
 			parent.removeChild(removableButtons[0]);	
 		} 
+		buttonNames = ['MR', 'MC', 'M-'];
 	},
 
 	memoryExecute = function(mOperator) {
 		switch(mOperator){
 			case 'M+':
 				createMemoryButtons();
-				memory += parseFloat(textbox.value);
+				memory += data.retrieve();
 				var memIndicator = document.getElementById("memory-indicator");
 				memIndicator.style.display = "block";
 				break;
 			case 'M-':
-				console.log("in M-");
-			 	memory -= parseFloat(textbox.value);
+			 	memory -= data.retrieve();
 				break;
 			case 'MC':
-				console.log("Remove Buttons");
 				clearMemory();
 				removeMemoryButtons();
 				break;
 			default:
-				textbox.value = parseFloat(memory);
+				data.store(memory);
 		}
 	},
 
@@ -136,7 +150,6 @@ var calculator = function () {
 
 
 	calculate = function (value) {
-
 		if(isMemoryOperator(value)){
 			memoryExecute(value);	
 			return;	
@@ -146,25 +159,23 @@ var calculator = function () {
 			return;
 		}
 		if(clearField) {
-			textbox.value = "0";
+			data.store("0");
 			clearField = false;
 		}
 		if(!isNaN(value)) {
-			if(textbox.value.length >= 10)
+			data.retrieve();
+			if(data.length >= 10)
 				return;
-			if(textbox.value == "0"){
-				textbox.value = "";
-			}
-			textbox.value += value;
+			data.store(data.retrieve() + value + "");
 			return;
 		}
 		if(value == DECIMAL) {
-			if(textbox.value.indexOf(".") == -1)
-				textbox.value += value;
+			if(data.retrieve().indexOf(".") == -1)
+				data.store(data.retrieve() + value + "");
 			return;
 		}
 		if(value == "C") {
-			textbox.value = "0";
+			data.store("0");
 			resetData();
 		}	
 		return;
@@ -172,7 +183,7 @@ var calculator = function () {
 	};
 
 	var init = function(){
-		textbox.value = "0";
+		data.store("0");
 		for(var i=0; i<buttons.length; i++) {
 			buttons[i].onclick = function(event){
 				calculate(this.value);
