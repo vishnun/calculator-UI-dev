@@ -4,3 +4,7 @@ button {
 input[type=text] {
 	font: 25px Arial Sans-serif;
 }
+
+.memory-operations button {
+	font-size: 15px;
+}

@@ -175,7 +175,7 @@ var calculator = function () {
 			return;
 		}
 		if(value == "C") {
-			data.store("0");
+			data.store(0);
 			resetData();
 		}	
 		return;
