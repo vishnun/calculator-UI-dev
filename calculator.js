@@ -93,14 +93,16 @@ var calculator = function () {
 	},
 
 	createMemoryButtons = function(){
+		var memoryCollection = document.createElement('div');
+		memoryCollection.setAttribute('id','removable');
+		document.getElementById('memory-operations').appendChild(memoryCollection);
+
 		while(buttonNames.length >0 ) {
 			var memoryButton= document.createElement('button');
 			var name = buttonNames.pop();
 			memoryButton.setAttribute('value', name);
-			memoryButton.setAttribute('id', 'removable');
-			memoryButton.innerHTML = name;
-			var memoryOperations = document.getElementById('memory-operations');
-			memoryOperations.appendChild(memoryButton);
+			memoryButton.innerHTML = name;			
+			memoryCollection.appendChild(memoryButton);
 			memoryButton.onclick = function(){
 				calculate(this.value);
 			};
@@ -114,11 +116,9 @@ var calculator = function () {
 	},
 
 	removeMemoryButtons = function() {
-		var removableButtons = document.getElementById("removable");
+		var removableCollection = document.getElementById("removable");
 		var parent = document.getElementById('memory-operations');
-		while(removableButtons.length){
-			parent.removeChild(removableButtons[0]);	
-		} 
+		parent.removeChild(removableCollection);	
 		buttonNames = ['MR', 'MC', 'M-'];
 	},
 

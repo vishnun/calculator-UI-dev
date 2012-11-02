@@ -21,10 +21,11 @@ button {
 }
 
 .memory-operations button {
+	float: left;
 	font-size: 25px;
 	width: 41px;
 	height: 45px;
-	margin: 1px;
+	margin: 2px;
 }
 
 .textbox {
