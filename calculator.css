@@ -21,7 +21,8 @@ button {
 }
 
 .memory-operations button {
-	width: 40px;
+	font-size: 25px;
+	width: 41px;
 	height: 45px;
 	margin: 1px;
 }
